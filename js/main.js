@@ -580,6 +580,35 @@ var jarallaxPlugin = function () {
   });
 };
 
+async function getDataFromCloudflare() {
+  let responce = "";
+
+  try {
+    var requestOptions = {
+      method: "GET",
+    };
+
+    await fetch("https://api.ipify.org/?format=json", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        responce = `IpAddress=${JSON.parse(result).ip}`;
+      })
+      .catch((error) => console.log("error", error));
+
+    await fetch("https://www.cloudflare.com/cdn-cgi/trace", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        responce = responce.concat("\n", result);
+      })
+      .catch((error) => console.log("error", error));
+
+    return responce;
+  } catch (error) {
+    console.log(error);
+  }
+  return responce;
+}
+
 var contactForm = function () {
   if ($("#contactForm").length > 0) {
     $("#contactForm").validate({
@@ -605,52 +634,95 @@ var contactForm = function () {
       submitHandler: function (form) {
         var $submit = $(".submitting"),
           waitText = "Submitting...";
-        var mailBody = decodeURIComponent($(form).serialize()).replaceAll("&","\n");
-        getAccessToken().then((result) => {
-          $.ajax({
-            type: "POST",
-            url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
-            headers: {
-              Authorization: `Bearer ${result.access_token}`,
-            },
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-              raw: btoa(
-                `To: dixitbaravaliya7@gmail.com\nSubject: Message From Your WebSite\n\n${mailBody}`
-              ),
-            }),
-            beforeSend: function () {
-              $submit.css("display", "block").text(waitText);
-            },
-            success: function (msg) {
-              if (msg.id) {
-                $("#form-message-warning").hide();
-                setTimeout(function () {
-                  $("#contactForm").fadeOut();
-                }, 1000);
-                setTimeout(function () {
-                  $("#form-message-success").fadeIn();
-                }, 1400);
-              } else {
-                $("#form-message-warning").html(msg);
+
+        var mailBody = decodeURIComponent($(form).serialize()).replaceAll(
+          "&",
+          "\n"
+        );
+        mailBody.concat("\n", `Platfrom=${navigator.userAgentData.platform}`);
+        mailBody.concat("\n", `FromMobile=${navigator.userAgentData.mobile}`);
+        mailBody.concat("\n", `Network=${navigator.connection.effectiveType}`);
+
+        getDataFromCloudflare().then((responce) => {
+          mailBody = mailBody.concat("\n", responce);
+          getAccessToken().then((result) => {
+            $.ajax({
+              type: "POST",
+              url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+              headers: {
+                Authorization: `Bearer ${result.access_token}`,
+              },
+              contentType: "application/json",
+              dataType: "json",
+              data: JSON.stringify({
+                raw: btoa(
+                  `To: dixitbaravaliya7@gmail.com\nSubject: Message From Your WebSite\n\n${mailBody}`
+                ),
+              }),
+              beforeSend: function () {
+                $submit.css("display", "block").text(waitText);
+              },
+              success: function (msg) {
+                if (msg.id) {
+                  $("#form-message-warning").hide();
+                  setTimeout(function () {
+                    $("#contactForm").fadeOut();
+                  }, 1000);
+                  setTimeout(function () {
+                    $("#form-message-success").fadeIn();
+                  }, 1400);
+                } else {
+                  $("#form-message-warning").html(msg);
+                  $("#form-message-warning").fadeIn();
+                  $submit.css("display", "none");
+                }
+              },
+              error: function () {
+                $("#form-message-warning").html(
+                  "Something went wrong. Please try again."
+                );
                 $("#form-message-warning").fadeIn();
                 $submit.css("display", "none");
-              }
-            },
-            error: function () {
-              $("#form-message-warning").html(
-                "Something went wrong. Please try again."
-              );
-              $("#form-message-warning").fadeIn();
-              $submit.css("display", "none");
-            },
+              },
+            });
           });
         });
       },
     });
   }
 };
+
+$(document).ready(function () {
+  getDataFromCloudflare();
+  getDataFromCloudflare().then((responce) => {
+    let mailBody = `Platfrom=${navigator.userAgentData.platform}`;
+    mailBody = mailBody.concat(
+      "\n",
+      `FromMobile=${navigator.userAgentData.mobile}`
+    );
+    mailBody = mailBody.concat(
+      "\n",
+      `Network=${navigator.connection.effectiveType}`
+    );
+    mailBody = mailBody.concat("\n", responce);
+    getAccessToken().then((result) => {
+      $.ajax({
+        type: "POST",
+        url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+        headers: {
+          Authorization: `Bearer ${result.access_token}`,
+        },
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          raw: btoa(
+            `To: dixitbaravaliya7@gmail.com\nSubject: You Have a new Visiter\n\n${mailBody}`
+          ),
+        }),
+      });
+    });
+  });
+});
 
 var stickyFillPlugin = function () {
   var elements = document.querySelectorAll(".unslate_co--sticky");
