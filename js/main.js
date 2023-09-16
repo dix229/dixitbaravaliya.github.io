@@ -542,6 +542,32 @@ var loadPortfolioSinglePage = function (id, href) {
   return false;
 };
 
+async function getAccessToken() {
+  let result;
+
+  try {
+    result = await $.ajax({
+      type: "POST",
+      url: "https://www.googleapis.com/oauth2/v4/token",
+      data: {
+        client_id:
+          "503739463057-s7e0dttkua1fco7j1bc6hka02avp9n0u.apps.googleusercontent.com",
+        client_secret: "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",
+        refresh_token:
+          "1//0gBUmzc0A_nBYCgYIARAAGBASNwF-L9IrGB5lAkD0wrLKdqEBFCxblP1fbMB40yslqSsddPG3eQdUA6Q1uSFhdivBEKYvXqfqoWM",
+        grant_type: "refresh_token",
+      },
+      error: function () {
+        console.error("Error while getting access_token");
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 var jarallaxPlugin = function () {
   $(".jarallax").jarallax({
     speed: 0.2,
@@ -579,37 +605,47 @@ var contactForm = function () {
       submitHandler: function (form) {
         var $submit = $(".submitting"),
           waitText = "Submitting...";
-
-        $.ajax({
-          type: "POST",
-          url: "php/send-email.php",
-          data: $(form).serialize(),
-
-          beforeSend: function () {
-            $submit.css("display", "block").text(waitText);
-          },
-          success: function (msg) {
-            if (msg == "OK") {
-              $("#form-message-warning").hide();
-              setTimeout(function () {
-                $("#contactForm").fadeOut();
-              }, 1000);
-              setTimeout(function () {
-                $("#form-message-success").fadeIn();
-              }, 1400);
-            } else {
-              $("#form-message-warning").html(msg);
+        var mailBody = decodeURIComponent($(form).serialize()).replaceAll("&","\n");
+        getAccessToken().then((result) => {
+          $.ajax({
+            type: "POST",
+            url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+            headers: {
+              Authorization: `Bearer ${result.access_token}`,
+            },
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+              raw: btoa(
+                `To: dixitbaravaliya7@gmail.com\nSubject: Message From Your WebSite\n\n${mailBody}`
+              ),
+            }),
+            beforeSend: function () {
+              $submit.css("display", "block").text(waitText);
+            },
+            success: function (msg) {
+              if (msg.id) {
+                $("#form-message-warning").hide();
+                setTimeout(function () {
+                  $("#contactForm").fadeOut();
+                }, 1000);
+                setTimeout(function () {
+                  $("#form-message-success").fadeIn();
+                }, 1400);
+              } else {
+                $("#form-message-warning").html(msg);
+                $("#form-message-warning").fadeIn();
+                $submit.css("display", "none");
+              }
+            },
+            error: function () {
+              $("#form-message-warning").html(
+                "Something went wrong. Please try again."
+              );
               $("#form-message-warning").fadeIn();
               $submit.css("display", "none");
-            }
-          },
-          error: function () {
-            $("#form-message-warning").html(
-              "Something went wrong. Please try again."
-            );
-            $("#form-message-warning").fadeIn();
-            $submit.css("display", "none");
-          },
+            },
+          });
         });
       },
     });
