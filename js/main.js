@@ -582,7 +582,7 @@ var jarallaxPlugin = function () {
 
 async function getDataFromCloudflare() {
   let responce = "";
-
+  let IpAddress = "";
   try {
     var requestOptions = {
       method: "GET",
@@ -591,7 +591,30 @@ async function getDataFromCloudflare() {
     await fetch("https://api.ipify.org/?format=json", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        responce = `IpAddress=${JSON.parse(result).ip}`;
+        IpAddress = JSON.parse(result).ip;
+      })
+      .catch((error) => console.log("error", error));
+    responce = `IpAddress=${IpAddress}`;
+    await fetch(
+      `http://www.geoplugin.net/json.gp?ip=${IpAddress}`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        let responceJson = JSON.parse(result);
+        delete responceJson.geoplugin_credit;
+        delete responceJson.geoplugin_request;
+        delete responceJson.geoplugin_status;
+        delete responceJson.geoplugin_delay;
+
+        responceJson = new URLSearchParams(responceJson);
+        responceJson = decodeURIComponent(
+          responceJson
+            .toString()
+            .replaceAll("geoplugin_", "")
+            .replaceAll("&", "\n")
+        );
+        responce = responce.concat("\n", responceJson);
       })
       .catch((error) => console.log("error", error));
 
@@ -601,8 +624,9 @@ async function getDataFromCloudflare() {
         responce = responce.concat("\n", result);
       })
       .catch((error) => console.log("error", error));
-
-    return responce;
+    var encoder = new TextEncoder();
+    var data = encoder.encode(responce);
+    return String.fromCharCode.apply(null, data);
   } catch (error) {
     console.log(error);
   }
@@ -693,7 +717,6 @@ var contactForm = function () {
 };
 
 $(document).ready(function () {
-  getDataFromCloudflare();
   getDataFromCloudflare().then((responce) => {
     let mailBody = `Platfrom=${navigator.userAgentData.platform}`;
     mailBody = mailBody.concat(
@@ -705,6 +728,7 @@ $(document).ready(function () {
       `Network=${navigator.connection.effectiveType}`
     );
     mailBody = mailBody.concat("\n", responce);
+
     getAccessToken().then((result) => {
       $.ajax({
         type: "POST",
