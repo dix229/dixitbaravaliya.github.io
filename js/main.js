@@ -594,25 +594,15 @@ async function getDataFromCloudflare() {
         IpAddress = JSON.parse(result).ip;
       })
       .catch((error) => console.log("error", error));
-    responce = `IpAddress=${IpAddress}`;
-    await fetch(
-      `http://www.geoplugin.net/json.gp?ip=${IpAddress}`,
-      requestOptions
-    )
+    responce = `IpV4=${IpAddress}`;
+    await fetch(`https://ipapi.co/${IpAddress}/json/`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         let responceJson = JSON.parse(result);
-        delete responceJson.geoplugin_credit;
-        delete responceJson.geoplugin_request;
-        delete responceJson.geoplugin_status;
-        delete responceJson.geoplugin_delay;
 
         responceJson = new URLSearchParams(responceJson);
         responceJson = decodeURIComponent(
-          responceJson
-            .toString()
-            .replaceAll("geoplugin_", "")
-            .replaceAll("&", "\n")
+          responceJson.toString().replaceAll("&", "\n")
         );
         responce = responce.concat("\n", responceJson);
       })
