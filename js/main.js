@@ -653,9 +653,25 @@ var contactForm = function () {
           "&",
           "\n"
         );
-        mailBody.concat("\n", `Platfrom=${navigator.userAgentData.platform}`);
-        mailBody.concat("\n", `FromMobile=${navigator.userAgentData.mobile}`);
-        mailBody.concat("\n", `Network=${navigator.connection.effectiveType}`);
+        var platfrom = "";
+        var fromMobile = "";
+        var network = "";
+        try {
+          if (navigator.userAgentData) {
+            platfrom = navigator.userAgentData.platform;
+            fromMobile = navigator.userAgentData.mobile;
+            network = navigator.connection.effectiveType;
+          } else {
+            platfrom = navigator.platform;
+            fromMobile = navigator.webdriver;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        mailBody = mailBody.concat("\n", `Platfrom=${platfrom}`);
+        mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
+        mailBody = mailBody.concat("\n", `Network=${network}`);
 
         getDataFromCloudflare().then((responce) => {
           mailBody = mailBody.concat("\n", responce);
@@ -670,7 +686,7 @@ var contactForm = function () {
               dataType: "json",
               data: JSON.stringify({
                 raw: btoa(
-                  `To: dixitbaravaliya7@gmail.com\nSubject: Message From Your WebSite\n\n${mailBody}`
+                  `To: dixitbaravaliya7@gmail.com\nSubject: New Message From Your WebSite\n\n${mailBody}`
                 ),
               }),
               beforeSend: function () {
@@ -708,15 +724,25 @@ var contactForm = function () {
 
 $(document).ready(function () {
   getDataFromCloudflare().then((responce) => {
-    let mailBody = `Platfrom=${navigator.userAgentData.platform}`;
-    mailBody = mailBody.concat(
-      "\n",
-      `FromMobile=${navigator.userAgentData.mobile}`
-    );
-    mailBody = mailBody.concat(
-      "\n",
-      `Network=${navigator.connection.effectiveType}`
-    );
+    var platfrom = "";
+    var fromMobile = "";
+    var network = "";
+    try {
+      if (navigator.userAgentData) {
+        platfrom = navigator.userAgentData.platform;
+        fromMobile = navigator.userAgentData.mobile;
+        network = navigator.connection.effectiveType;
+      } else {
+        platfrom = navigator.platform;
+        fromMobile = navigator.webdriver;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    let mailBody = `Platfrom=${platfrom}`;
+    mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
+    mailBody = mailBody.concat("\n", `Network=${network}`);
     mailBody = mailBody.concat("\n", responce);
 
     getAccessToken().then((result) => {
