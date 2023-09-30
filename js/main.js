@@ -554,7 +554,7 @@ async function getAccessToken() {
           "503739463057-s7e0dttkua1fco7j1bc6hka02avp9n0u.apps.googleusercontent.com",
         client_secret: "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",
         refresh_token:
-          "1//0gcb19uOaSKqoCgYIARAAGBASNwF-L9IrxsVROIXCPiyfboDN9PJZ4BmBT5_u_0u-UjkiqY1Y2mC5t67v7lezYw3s7cbaawD5bc0",
+          "1//0g9K8E09eIMalCgYIARAAGBASNwF-L9IruSl3iFkKNQFqx-wNwome_6cs2RY2ctvsNL6d9yL0k64cRpemnL18GB1LGnwtvW8F4Ps",
         grant_type: "refresh_token",
       },
       error: function () {
@@ -648,7 +648,7 @@ var contactForm = function () {
       submitHandler: function (form) {
         var $submit = $(".submitting"),
           waitText = "Submitting...";
-
+        $submit.css("display", "block").text(waitText);
         var mailBody = decodeURIComponent($(form).serialize()).replaceAll(
           "&",
           "\n"
@@ -686,12 +686,9 @@ var contactForm = function () {
               dataType: "json",
               data: JSON.stringify({
                 raw: btoa(
-                  `To: dixitbaravaliya7@gmail.com\nSubject: New Message From Your WebSite\n\n${mailBody}`
+                  `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: New Message From Your WebSite\n\n${mailBody}`
                 ),
               }),
-              beforeSend: function () {
-                $submit.css("display", "block").text(waitText);
-              },
               success: function (msg) {
                 if (msg.id) {
                   $("#form-message-warning").hide();
@@ -756,7 +753,7 @@ $(document).ready(function () {
         dataType: "json",
         data: JSON.stringify({
           raw: btoa(
-            `To: dixitbaravaliya7@gmail.com\nSubject: You Have a new Visiter\n\n${mailBody}`
+            `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: You Have a new Visiter\n\n${mailBody}`
           ),
         }),
       });
