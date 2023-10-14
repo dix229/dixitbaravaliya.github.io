@@ -12,7 +12,6 @@ jQuery(function ($) {
   mobileToggleClick();
   onePageNavigation();
   siteIstotope();
-  portfolioItemClick();
   owlCarouselPlugin();
   floatingLabel();
   scrollWindow();
@@ -413,70 +412,6 @@ var onePageNavigation = function () {
   );
 };
 
-// load ajax page
-var portfolioItemClick = function () {
-  $(".ajax-load-page").on("click", function (e) {
-    var id = $(this).data("id"),
-      href = $(this).attr("href");
-
-    if ($("#portfolio-single-holder > div").length) {
-      $("#portfolio-single-holder > div").remove();
-    }
-
-    TweenMax.to(".loader-portfolio-wrap", 1, {
-      top: "-50px",
-      autoAlpha: 1,
-      display: "block",
-      ease: Power4.easeOut,
-    });
-
-    $("html, body").animate(
-      {
-        scrollTop: $("#portfolio-section").offset().top - 50,
-      },
-      700,
-      "easeInOutExpo",
-      function () {}
-    );
-
-    setTimeout(function () {
-      loadPortfolioSinglePage(id, href);
-    }, 100);
-
-    e.preventDefault();
-  });
-
-  // Close
-  $("body").on("click", ".js-close-portfolio", function () {
-    setTimeout(function () {
-      $("html, body").animate(
-        {
-          scrollTop: $("#portfolio-section").offset().top - 50,
-        },
-        700,
-        "easeInOutExpo"
-      );
-    }, 200);
-
-    TweenMax.set(".portfolio-wrapper", {
-      visibility: "visible",
-      height: "auto",
-    });
-    TweenMax.to(".portfolio-single-inner", 1, {
-      marginTop: "50px",
-      opacity: 0,
-      display: "none",
-      onComplete() {
-        TweenMax.to(".portfolio-wrapper", 1, {
-          marginTop: "0px",
-          autoAlpha: 1,
-          position: "relative",
-        });
-      },
-    });
-  });
-};
-
 $(document).ajaxStop(function () {
   setTimeout(function () {
     TweenMax.to(".loader-portfolio-wrap", 1, {
@@ -719,47 +654,47 @@ var contactForm = function () {
   }
 };
 
-$(document).ready(function () {
-  getDataFromCloudflare().then((responce) => {
-    var platfrom = "";
-    var fromMobile = "";
-    var network = "";
-    try {
-      if (navigator.userAgentData) {
-        platfrom = navigator.userAgentData.platform;
-        fromMobile = navigator.userAgentData.mobile;
-        network = navigator.connection.effectiveType;
-      } else {
-        platfrom = navigator.platform;
-        fromMobile = navigator.webdriver;
-      }
-    } catch (error) {
-      console.error(error);
-    }
+// $(document).ready(function () {
+//   getDataFromCloudflare().then((responce) => {
+//     var platfrom = "";
+//     var fromMobile = "";
+//     var network = "";
+//     try {
+//       if (navigator.userAgentData) {
+//         platfrom = navigator.userAgentData.platform;
+//         fromMobile = navigator.userAgentData.mobile;
+//         network = navigator.connection.effectiveType;
+//       } else {
+//         platfrom = navigator.platform;
+//         fromMobile = navigator.webdriver;
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
 
-    let mailBody = `Platfrom=${platfrom}`;
-    mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
-    mailBody = mailBody.concat("\n", `Network=${network}`);
-    mailBody = mailBody.concat("\n", responce);
+//     let mailBody = `Platfrom=${platfrom}`;
+//     mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
+//     mailBody = mailBody.concat("\n", `Network=${network}`);
+//     mailBody = mailBody.concat("\n", responce);
 
-    getAccessToken().then((result) => {
-      $.ajax({
-        type: "POST",
-        url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
-        headers: {
-          Authorization: `Bearer ${result.access_token}`,
-        },
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify({
-          raw: btoa(
-            `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: You Have a new Visiter\n\n${mailBody}`
-          ),
-        }),
-      });
-    });
-  });
-});
+//     getAccessToken().then((result) => {
+//       $.ajax({
+//         type: "POST",
+//         url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+//         headers: {
+//           Authorization: `Bearer ${result.access_token}`,
+//         },
+//         contentType: "application/json",
+//         dataType: "json",
+//         data: JSON.stringify({
+//           raw: btoa(
+//             `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: You Have a new Visiter\n\n${mailBody}`
+//           ),
+//         }),
+//       });
+//     });
+//   });
+// });
 
 var stickyFillPlugin = function () {
   var elements = document.querySelectorAll(".unslate_co--sticky");
