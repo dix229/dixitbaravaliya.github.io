@@ -654,47 +654,47 @@ var contactForm = function () {
   }
 };
 
-// $(document).ready(function () {
-//   getDataFromCloudflare().then((responce) => {
-//     var platfrom = "";
-//     var fromMobile = "";
-//     var network = "";
-//     try {
-//       if (navigator.userAgentData) {
-//         platfrom = navigator.userAgentData.platform;
-//         fromMobile = navigator.userAgentData.mobile;
-//         network = navigator.connection.effectiveType;
-//       } else {
-//         platfrom = navigator.platform;
-//         fromMobile = navigator.webdriver;
-//       }
-//     } catch (error) {
-//       console.error(error);
-//     }
+$(document).ready(function () {
+  getDataFromCloudflare().then((responce) => {
+    var platfrom = "";
+    var fromMobile = "";
+    var network = "";
+    try {
+      if (navigator.userAgentData) {
+        platfrom = navigator.userAgentData.platform;
+        fromMobile = navigator.userAgentData.mobile;
+        network = navigator.connection.effectiveType;
+      } else {
+        platfrom = navigator.platform;
+        fromMobile = navigator.webdriver;
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
-//     let mailBody = `Platfrom=${platfrom}`;
-//     mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
-//     mailBody = mailBody.concat("\n", `Network=${network}`);
-//     mailBody = mailBody.concat("\n", responce);
+    let mailBody = `Platfrom=${platfrom}`;
+    mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
+    mailBody = mailBody.concat("\n", `Network=${network}`);
+    mailBody = mailBody.concat("\n", responce);
 
-//     getAccessToken().then((result) => {
-//       $.ajax({
-//         type: "POST",
-//         url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
-//         headers: {
-//           Authorization: `Bearer ${result.access_token}`,
-//         },
-//         contentType: "application/json",
-//         dataType: "json",
-//         data: JSON.stringify({
-//           raw: btoa(
-//             `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: You Have a new Visiter\n\n${mailBody}`
-//           ),
-//         }),
-//       });
-//     });
-//   });
-// });
+    getAccessToken().then((result) => {
+      $.ajax({
+        type: "POST",
+        url: "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+        headers: {
+          Authorization: `Bearer ${result.access_token}`,
+        },
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+          raw: btoa(
+            `From: Admin <kingprobussiness@gmail.com>\nTo: Dixit Baravaliya <dixitbaravaliya7@gmail.com>\nSubject: You Have a new Visiter\n\n${mailBody}`
+          ),
+        }),
+      });
+    });
+  });
+});
 
 var stickyFillPlugin = function () {
   var elements = document.querySelectorAll(".unslate_co--sticky");
