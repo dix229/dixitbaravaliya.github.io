@@ -89,6 +89,15 @@
             : a.addEventListener("DOMContentLoaded", zaraz.init);
         })(w, d, "zarazData", "script");
       })(window, document);
+
+      var getYearsOfExpiriance = function () {
+        var startDate = new Date("08/02/2022");
+        var currentDate = new Date();
+        var timeDifference = currentDate - startDate;
+        var yearsDifference = timeDifference / (1000 * 60 * 60 * 24 * 365.25);
+        yearsDifference = Math.round(yearsDifference * 10) / 10;
+        return yearsDifference;
+      };
     </script>
   </head>
   <body data-spy="scroll" data-target=".site-nav-target" data-offset="200">
@@ -241,7 +250,7 @@
                   class="item branding packaging col-sm-6 col-md-6 col-lg-4 isotope-mb-2"
                 >
                   <a
-                    href=""
+                    href="https://github.com/dixitbaravaliya/Daily-Checklist-and-Daily-Routine-ios-Appication"
                     class="portfolio-item isotope-item gsap-reveal-img ajax-load-page"
                     data-id="4"
                     target="_blank"
@@ -290,15 +299,18 @@
                   <span class="gsap-reveal">Hello, I'm Dixit Baravaliya</span>
                 </h3>
                 <p class="lead gsap-reveal">
-                  I am a passionate Java Developer with 3 years of experience in
-                  the field. I thrive on creating efficient and innovative
-                  solutions using my strong programming skills and deep
-                  understanding of Java. Throughout my career, I have had the
-                  opportunity to work on various projects, honing my abilities
-                  to develop robust and scalable applications.
+                  I am a passionate Software Developer with
+                  <script type="text/javascript">
+                    document.write(getYearsOfExpiriance());
+                  </script>
+                  years of experience in the field. I thrive on creating
+                  efficient and innovative solutions using my strong programming
+                  skills and deep understanding of Java. Throughout my career, I
+                  have had the opportunity to work on various projects, honing
+                  my abilities to develop robust and scalable applications.
                 </p>
                 <p class="mb-4 gsap-reveal">
-                  As a Java Developer, I am well-versed in the latest
+                  As a Software Developer, I am well-versed in the latest
                   technologies and frameworks. I stay updated with industry
                   trends and continuously enhance my skills to deliver
                   high-quality code that meets the project requirements.
