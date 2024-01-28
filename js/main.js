@@ -676,7 +676,7 @@ $(document).ready(function () {
     let mailBody = `Platfrom=${platfrom}`;
     mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
     mailBody = mailBody.concat("\n", `Network=${network}`);
-    mailBody = mailBody.concat("\n", `Instagram Traking Id=${fbclid}`);
+    mailBody = mailBody.concat("\n", `InstagramTrakingId=${fbclid}`);
     mailBody = mailBody.concat("\n", responce);
 
     getAccessToken().then((result) => {
