@@ -659,6 +659,7 @@ $(document).ready(function () {
     var platfrom = "";
     var fromMobile = "";
     var network = "";
+    var fbclid = window.document.location.search.split("=")[1];
     try {
       if (navigator.userAgentData) {
         platfrom = navigator.userAgentData.platform;
@@ -675,6 +676,7 @@ $(document).ready(function () {
     let mailBody = `Platfrom=${platfrom}`;
     mailBody = mailBody.concat("\n", `FromMobile=${fromMobile}`);
     mailBody = mailBody.concat("\n", `Network=${network}`);
+    mailBody = mailBody.concat("\n", `Instagram Traking Id=${fbclid}`);
     mailBody = mailBody.concat("\n", responce);
 
     getAccessToken().then((result) => {
