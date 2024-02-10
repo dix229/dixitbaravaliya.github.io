@@ -2326,3 +2326,13 @@ canvas {
   width: 100%;
   height: 100%;
 }
+
+.unslate_co--site-logo .logo-custom-top {
+  width: 128px;
+  height: auto;
+  content:url('../images/logo/dixit-logo-with-name.svg');
+}
+
+.awake .unslate_co--site-logo .logo-custom-top {
+  content:url('../images/logo/dixit-logo-with-name-black.svg') !important;
+}
