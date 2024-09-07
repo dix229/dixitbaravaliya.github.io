@@ -42,7 +42,7 @@
 
     <link rel="stylesheet" href="css/style.css" />
     <script>
-      var getYearsOfExpiriance = function () {
+      var getYearsOfExperience = function () {
         var startDate = new Date("08/02/2020");
         var currentDate = new Date();
         var timeDifference = currentDate - startDate;
@@ -145,7 +145,7 @@
             <div id="portfolio-single-holder"></div>
             <div class="portfolio-wrapper">
               <div
-                class="d-flex align-items-center mb-4 gsap-reveal gsap-reveal-filter"
+                class="d-flex align-items-center mb-4 gsap-reveal1 gsap-reveal-filter"
               >
                 <h2 class="mr-auto heading-h2">
                   <span class="gsap-reveal">Portfolio</span>
@@ -253,7 +253,7 @@
                 <p class="lead gsap-reveal">
                   I am a passionate Software Developer with
                   <script type="text/javascript">
-                    document.write(getYearsOfExpiriance());
+                    document.write(getYearsOfExperience());
                   </script>
                   years of experience in the field. I thrive on creating
                   efficient and innovative solutions using my strong programming
@@ -639,12 +639,13 @@
       var mouseY;
 
       var renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      renderer.setSize(window.innerWidth - 15, window.innerHeight);
       sceneContainer.appendChild(renderer.domElement);
       window.addEventListener("resize", function () {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.screen.width - 15, window.innerHeight);
       });
 
       var distance = Math.min(200, window.innerWidth / 4);
