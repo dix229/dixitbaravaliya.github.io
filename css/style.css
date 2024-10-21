@@ -168,13 +168,13 @@ a:hover {
   transform: translateX(-50%);
 }
 
-.unslate_co--site-nav .unslate_co--site-logo {
+.unslate_co--site-nav .unslate-co-site-logo {
   font-size: 1.7rem;
   color: #fff;
   font-weight: 700;
 }
 
-.unslate_co--site-nav .unslate_co--site-logo span {
+.unslate_co--site-nav .unslate-co-site-logo span {
   color: #d63447;
 }
 
@@ -712,7 +712,7 @@ a:hover {
   padding-bottom: 5px;
 }
 
-.unslate_co--site-nav.scrolled .unslate_co--site-logo {
+.unslate_co--site-nav.scrolled .unslate-co-site-logo {
   color: #000;
 }
 
@@ -2327,12 +2327,12 @@ canvas {
   height: 100%;
 }
 
-.unslate_co--site-logo .logo-custom-top {
+.unslate-co-site-logo .logo-custom-top {
   width: 128px;
   height: auto;
   content:url('../images/logo/dixit-logo-with-name.svg');
 }
 
-.awake .unslate_co--site-logo .logo-custom-top {
+.awake .unslate-co-site-logo .logo-custom-top {
   content:url('../images/logo/dixit-logo-with-name-black.svg') !important;
 }
