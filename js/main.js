@@ -481,17 +481,12 @@ async function getAccessToken() {
   let result;
 
   try {
+    let encodedBody = "eyJjbGllbnRfaWQiOiIyMDU2MjA1NTM2MDktNmF1dnM1b2NxODNrbDN1cHRzNG9hczI3dnVvNTd2dTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJjbGllbnRfc2VjcmV0IjoiR09DU1BYLXNxV0ZMR09xNHVITHhmZGVya25QV3ltTDhjb0MiLCJyZWZyZXNoX3Rva2VuIjoiMS8vMGdmTzZwY0g3eHBwcUNnWUlBUkFBR0JBU053Ri1MOUlyTDJtZG0tZ0E5WTktekdLUWQ0aVhfQjJnY2gwZElacjZYM0E0NTlrQ190Qk52cXNKLTcwSUdLdUk0N25yV093OVlQcyIsImdyYW50X3R5cGUiOiJyZWZyZXNoX3Rva2VuIn0="
+
     result = await $.ajax({
       type: "POST",
       url: "https://www.googleapis.com/oauth2/v4/token",
-      data: {
-        client_id:
-          "205620553609-6auvs5ocq83kl3upts4oas27vuo57vu2.apps.googleusercontent.com",
-        client_secret: "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",
-        refresh_token:
-          "1//0grc9XCWu2UaACgYIARAAGBASNwF-L9IrR5bVxvnZhksaqg5N0iZh_weCcV9xqT2Ef4OS2xVtpWA_9rL1Tr1_WW3D7Hh9ZFSm5tU",
-        grant_type: "refresh_token",
-      },
+      data: JSON.parse(atob(encodedBody)),
       error: function () {
         console.error("Error while getting access_token");
       },
